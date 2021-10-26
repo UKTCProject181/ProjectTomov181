@@ -7,6 +7,10 @@ public class App {
         System.out.println("How many students would you like to create? :");
         int studentCount = Integer.parseInt(scanner.nextLine());
         Utilities.createStudents(studentCount);
+        //comentara na mitaka
+        //comentara na mitaka 2
+        //comentara na denis
+        //ivan e slab na rocket league
         System.out.println();
         while(!endWorkingDay) {
             System.out.println("What would you like to do next? ");
