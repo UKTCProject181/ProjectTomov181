@@ -7,7 +7,6 @@ public class App {
         System.out.println("How many students would you like to create? :");
         int studentCount = Integer.parseInt(scanner.nextLine());
         Utilities.createStudents(studentCount);
-//asd
         System.out.println();
         while(!endWorkingDay) {
             System.out.println("What would you like to do next? ");
