@@ -13,9 +13,9 @@ public class App {
             System.out.println("{ 'Insert grades' 'Students information' 'End day' }");
             String input = scanner.nextLine();
             switch (input.toLowerCase()) {
-                case "insert grades" -> Utilities.addStudentScores();
-                case "students information" -> Utilities.printStudentInformation();
-                case "end day" -> endWorkingDay = true;
+                case "insert grades": Utilities.addStudentScores();break;
+                case "students information": Utilities.printStudentInformation();break;
+                case "end day": endWorkingDay = true;break;
             }
         }
         System.out.println();
