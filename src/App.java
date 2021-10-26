@@ -7,20 +7,15 @@ public class App {
         System.out.println("How many students would you like to create? :");
         int studentCount = Integer.parseInt(scanner.nextLine());
         Utilities.createStudents(studentCount);
-        //comentara na mitaka
-        //comentara na mitaka 2
-        //comentara na denis
-        //ivan e slab na rocket league
-        //toshko e slab na league
         System.out.println();
         while(!endWorkingDay) {
             System.out.println("What would you like to do next? ");
             System.out.println("{ 'Insert grades' 'Students information' 'End day' }");
             String input = scanner.nextLine();
             switch (input.toLowerCase()) {
-                case "insert grades": Utilities.addStudentScores();break;
-                case "students information": Utilities.printStudentInformation();break;
-                case "end day": endWorkingDay = true;break;
+                case "insert grades" -> Utilities.addStudentScores();
+                case "students information" -> Utilities.printStudentInformation();
+                case "end day" -> endWorkingDay = true;
             }
         }
         System.out.println();
