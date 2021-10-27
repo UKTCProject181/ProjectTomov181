@@ -1,30 +1,30 @@
+import java.util.Locale;
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        boolean endWorkingDay = false;
-        System.out.println("How many students would you like to create? :");
-        int studentCount = Integer.parseInt(scanner.nextLine());
-        Utilities.createStudents(studentCount);
-        System.out.println();
-        while(!endWorkingDay) {
-            System.out.println("What would you like to do next? ");
-            System.out.println("{ 'Insert grades' 'Students information' 'End day' }");
-            String input = scanner.nextLine();
-            switch (input.toLowerCase()) {
-                case "insert grades" -> Utilities.addStudentScores();
-                case "students information" -> Utilities.printStudentInformation();
-                case "end day" -> endWorkingDay = true;
-            }
-        }
-        System.out.println();
-        System.out.println();
-        System.out.println("WORKING DAY FINISHED. GO HOME AND RELAX!");
+        Scanner scan = new Scanner(System.in);
+        Classroom classroom = new Classroom();
+        System.out.println("e-Journal");
+        System.out.println("{Add students}, {Add grades}, {Print students}, {End program}");
+        String choice = scan.nextLine();
+        while(!choice.toLowerCase().equals("end program")) {
+            switch (choice.toLowerCase()) {
+                case "add students" -> {
+                    classroom.addStudents();
+                }
+                case "print students" -> {
+                    classroom.printAllStudents();
+                }
 
+                case "add grades" -> {
+                    classroom.addGrade();
+                }
+
+            }
+            System.out.println();
+            System.out.println("{Add students}, {Add grades}, {Print students}, {End program}");
+            choice = scan.nextLine();
+        }
     }
 }
-//raboti denis
-//raboti mitko
-//raboti miro
-//raboti vankata

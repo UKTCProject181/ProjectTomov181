@@ -1,34 +1,47 @@
-public class Student {
+import java.util.ArrayList;
 
+public class Student {
     private String firstName;
     private String lastName;
-    private String courseNumber;
-    private Scores studentScores;
+    private String classNumber;
+    ArrayList<Grade> grades;
 
-    public Student(String Name, String LastName , String CourseNumber){
-        this.firstName = Name;
-        this.lastName = LastName;
-        this.courseNumber = CourseNumber;
-        this.studentScores = new Scores(0.00f, 0.00f, 0.00f); //implemented at 70th row in Utilities.java
+    public Student(String firstName, String lastName, String classNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.classNumber = classNumber;
+        this.grades = new ArrayList<Grade>();
     }
 
     public String getFirstName() {
-        return this.firstName;
-    }
-    public String getLastName(){
-        return this.lastName;
-    }
-    public String getCourseNumber(){
-        return this.courseNumber;
+        return firstName;
     }
 
-    public void setStudentScores(float MathScore, float PhysicsScore, float ProgrammingScore){
-        this.studentScores = new Scores(MathScore, PhysicsScore, ProgrammingScore);
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getAllProperties(){
-        return "{First name: " + this.firstName + ", Last name: " + this.lastName + ", Course Number: " + this.courseNumber + " , " +this.studentScores.getAllScores() + ", Average Score: " + this.studentScores.getAverageScore() +" }";
+    public String getLastName() {
+        return lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
+    public String getClassNumber() {
+        return classNumber;
+    }
+
+    public void setClassNumber(String classNumber) {
+        this.classNumber = classNumber;
+    }
+
+    public ArrayList<Grade> getGrades() {
+        return grades;
+    }
+
+    public void setGrades(ArrayList<Grade> grades) {
+        this.grades = grades;
+    }
 }
