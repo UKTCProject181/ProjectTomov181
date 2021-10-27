@@ -56,5 +56,6 @@ public class Classroom {
             String classNumber = scan.nextLine();
             this.students.add(new Student(firstName, lastName, classNumber));
         }
+        //test
     }
 }
