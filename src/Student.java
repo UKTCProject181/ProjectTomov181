@@ -44,4 +44,5 @@ public class Student {
     public void setGrades(ArrayList<Grade> grades) {
         this.grades = grades;
     }
+
 }
