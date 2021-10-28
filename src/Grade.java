@@ -1,10 +1,12 @@
-public class Grade {
-    private String subject;
-    private String mark;
+import java.io.Serializable;
 
-    public Grade(String subject, String mark) {
+public class Grade implements Serializable {
+    private String subject;
+    private String grade;
+
+    public Grade(String subject, String grade) {
         this.subject = subject;
-        this.mark = mark;
+        this.grade = grade;
     }
 
     public String getSubject() {
@@ -15,11 +17,11 @@ public class Grade {
         this.subject = subject;
     }
 
-    public String getMark() {
-        return mark;
+    public String getGrade() {
+        return grade;
     }
 
-    public void setMark(String mark) {
-        this.mark = mark;
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }

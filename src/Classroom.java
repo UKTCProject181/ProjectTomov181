@@ -1,7 +1,10 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Classroom {
+
+public class Classroom implements Serializable {
+    private final Scanner scan = new Scanner(System.in);
     ArrayList<Student> students;
 
     public Classroom() {
@@ -22,74 +25,92 @@ public class Classroom {
             System.out.println("Last name: "+s.getLastName());
             System.out.println("ClassNumber: "+s.getClassNumber());
             for(Grade g:s.grades){
-                System.out.println("Subject: "+g.getSubject()+" - Grade: "+g.getMark());
+                System.out.println("Subject: "+g.getSubject()+" - Grade: "+g.getGrade());
             }
             System.out.println();
         }
     }
 
-    public String checkValidMark(String mark) { //validation - String mark
-        Scanner scan = new Scanner(System.in);
-        int scoreToInt = Integer.parseInt(mark);
-        boolean check = false;
+    public String checkValidGrade(String grade) {
+        int scoreToInt = Integer.parseInt(grade);
         if(scoreToInt >= 2 && scoreToInt <= 6) {
             return String.valueOf(scoreToInt);
         }
-        while (!check) {
-            System.out.print("Please insert valid student mark (2 - 6): ");
+        while (true) {
+            System.out.print("Please insert valid student grade (2 - 6): ");
             scoreToInt = Integer.parseInt(scan.nextLine());
             if (scoreToInt >= 2 && scoreToInt <= 6) {
-                check = true;
+                return String.valueOf(scoreToInt);
             }
         }
-        return String.valueOf(scoreToInt);
+    }
+
+    public boolean checkValidClassNumberAddGrade(String classNum) {
+        int currentArrayPosition = 0;
+        if(students.isEmpty()) {
+            System.out.println("There are no students added!");
+            return false;
+        }
+        for(Student student : students) {
+            if(classNum.equals(student.getClassNumber())) {
+                return true;
+            }
+        }
+        while(true) {
+            for (Student student : students) {
+                currentArrayPosition++;
+                if (!classNum.equals(student.getClassNumber())) {
+                    System.out.println("Class number doesn't exists!");
+                    return false;
+                }
+                if(currentArrayPosition == students.size()) {
+                    return true;
+                }
+            }
+            currentArrayPosition = 0;
+        }
     }
 
     public void addGrade(){
-        Scanner scan = new Scanner(System.in);
         System.out.print("Enter ClassNumber:");
         String classNum = scan.nextLine();
-        System.out.print("Enter Subject:");
-        String subject = scan.nextLine();
-        System.out.print("Enter Mark:");
-        String mark = scan.nextLine();
-        mark = checkValidMark(mark);
-        for (Student student : students) {
-            if(student.getClassNumber().equals(classNum)){
-                student.grades.add(new Grade(subject, mark));
+        if(checkValidClassNumberAddGrade(classNum)) {
+            System.out.print("Enter Subject:");
+            String subject = scan.nextLine();
+            System.out.print("Enter Grade:");
+            String grade = scan.nextLine();
+            grade = checkValidGrade(grade);
+            for (Student student : students) {
+                if(student.getClassNumber().equals(classNum)){
+                    student.grades.add(new Grade(subject, grade));
+                }
             }
         }
     }
 
-    public String checkValidClassNumber(String classNum) { //validation - String classNumber
-        Scanner scan = new Scanner(System.in);
-        boolean check = false;
-        String classNumMethod = classNum;
-        int counter = 0;
-        while(!check) {
+    public String checkValidClassNumberAddStudents(String classNum) {
+        int currentArrayPosition = 0;
+        while(true) {
             if(students.isEmpty()) {
-                return classNumMethod;
+                return classNum;
             }
             for (Student student : students) {
-                counter++;
-                if (classNumMethod.equals(student.getClassNumber())) {
+                currentArrayPosition++;
+                if (classNum.equals(student.getClassNumber())) {
                     System.out.println("Class number already exists!");
                     System.out.print("Enter new one: ");
-                    classNumMethod = scan.nextLine();
-                    counter = 0;
+                    classNum = scan.nextLine();
+                    currentArrayPosition = 0;
                 }
-                if(counter == students.size()) {
-                    check = true;
-                    break;
+                if(currentArrayPosition == students.size()) {
+                    return classNum;
                 }
             }
-            counter = 0;
+            currentArrayPosition = 0;
         }
-        return classNumMethod;
     }
 
     public void addStudents(){
-        Scanner scan = new Scanner(System.in);
         System.out.print("How many students do you want to add: ");
         int count = Integer.parseInt(scan.nextLine());
         for (int i = 0; i < count; i++) {
@@ -100,8 +121,35 @@ public class Classroom {
             String lastName = scan.nextLine();
             System.out.print("ClassNumber: ");
             String classNumber = scan.nextLine();
-            classNumber = checkValidClassNumber(classNumber);
+            classNumber = checkValidClassNumberAddStudents(classNumber);
             this.students.add(new Student(firstName, lastName, classNumber));
+        }
+    }
+
+    public void endProgram() {
+        try{
+            FileOutputStream writeData = new FileOutputStream("output.txt");
+            ObjectOutputStream writeStream = new ObjectOutputStream(writeData);
+
+            writeStream.writeObject(this.students);
+            writeStream.flush();
+            writeStream.close();
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startProgram() {
+        try{
+            FileInputStream readData = new FileInputStream("output.txt");
+            ObjectInputStream readStream = new ObjectInputStream(readData);
+
+            this.students = (ArrayList<Student>) readStream.readObject();
+            readStream.close();
+
+        }catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

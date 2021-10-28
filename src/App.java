@@ -1,11 +1,12 @@
 import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args){
         Scanner scan = new Scanner(System.in);
         Classroom classroom = new Classroom();
         System.out.println("|===== e-Journal =====|");
-        System.out.println("{Add students}, {Add grades}, {Print students}, {End program}");
+        System.out.println("{Add students}, {Add grade}, {Print students}, {End program}");
+        classroom.startProgram();
         String choice = scan.nextLine();
         while(!choice.toLowerCase().equals("end program")) {
             switch (choice.toLowerCase()) {
@@ -13,12 +14,13 @@ public class App {
 
                 case "print students" -> classroom.printAllStudents();
 
-                case "add grades" -> classroom.addGrade();
+                case "add grade" -> classroom.addGrade();
 
             }
             System.out.println();
-            System.out.println("{Add students}, {Add grades}, {Print students}, {End program}");
+            System.out.println("{Add students}, {Add grade}, {Print students}, {End program}");
             choice = scan.nextLine();
         }
+        classroom.endProgram();
     }
 }
