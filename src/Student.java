@@ -14,6 +14,10 @@ public class Student implements Serializable {
         this.grades = new ArrayList<Grade>();
     }
 
+    public Student() {
+        this.grades = new ArrayList<Grade>();
+    }
+
     public String getFirstName() {
         return firstName;
     }
