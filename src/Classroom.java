@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class Classroom implements Serializable {
     private final Scanner scan = new Scanner(System.in);
     ArrayList<Student> students;
-
     private String paralelka;
     private File info;
 
@@ -62,7 +61,7 @@ public class Classroom implements Serializable {
             if(scoreToInt >= 2 && scoreToInt <= 6) {
                 return String.valueOf(scoreToInt);
             }
-            System.out.print("Please insert valid student grade (2 - 6): ");
+            System.out.print("Please enter valid student grade (2 - 6): ");
             scoreToInt = Integer.parseInt(scan.nextLine());
         }
     }
@@ -81,7 +80,7 @@ public class Classroom implements Serializable {
 
     public void addGrade(){
         if(students.isEmpty()){
-            System.out.println("There are no students");
+            System.out.println("There are no students!");
             return;
         }
         System.out.print("Enter ClassNumber:");
@@ -117,7 +116,7 @@ public class Classroom implements Serializable {
                 if (!checkValidClassNumber(classNumber)) {
                     break;
                 } else {
-                    System.out.println("This number already exists");
+                    System.out.println("This number already exists!");
                     System.out.print("ClassNumber: ");
                     classNumber = scan.nextLine();
                 }

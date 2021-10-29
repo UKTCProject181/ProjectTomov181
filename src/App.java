@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(System.in);
         Classroom classroom = new Classroom("181");
         System.out.println("============================== e-Journal ==============================");
