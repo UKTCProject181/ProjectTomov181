@@ -7,27 +7,23 @@ public class Classroom implements Serializable {
     private final Scanner scan = new Scanner(System.in);
     ArrayList<Student> students;
     private String paralelka;
-    private File info;
+    private final File info;
 
     public Classroom(String paralelka) throws IOException {
         this.paralelka = paralelka;
         this.info = new File(paralelka+".txt");
         if(this.info.createNewFile()){
-            this.students = new ArrayList<Student>();
+            this.students = new ArrayList<>();
         }else if(this.info.length()!=0){
             try{
                 ObjectInputStream is = new ObjectInputStream(new FileInputStream(this.info.getName()));
                 this.students = (ArrayList<Student>) is.readObject();
                 is.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }else{
-            this.students = new ArrayList<Student>();
+            this.students = new ArrayList<>();
         }
     }
 
@@ -93,6 +89,12 @@ public class Classroom implements Serializable {
             grade = checkValidGrade(grade);
             for (Student student : students) {
                 if(student.getClassNumber().equals(classNum)) {
+                    for(Grade g : student.grades){
+                        if(g.getSubject().equals(subject)){
+                            g.setGrade(g.getGrade() + ", "+grade);
+                            return;
+                        }
+                    }
                     student.grades.add(new Grade(subject, grade));
                 }
             }
