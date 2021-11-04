@@ -7,23 +7,27 @@ public class Classroom implements Serializable {
     private final Scanner scan = new Scanner(System.in);
     ArrayList<Student> students;
     private String paralelka;
-    private final File info;
+    private File info;
 
+
+    //
     public Classroom(String paralelka) throws IOException {
         this.paralelka = paralelka;
-        this.info = new File(paralelka+".txt");
-        if(this.info.createNewFile()){
-            this.students = new ArrayList<>();
-        }else if(this.info.length()!=0){
-            try{
+        this.info = new File(paralelka + ".txt");
+        if (this.info.createNewFile()) {
+            this.students = new ArrayList<Student>();
+        } else if (this.info.length() != 0) {
+            try {
                 ObjectInputStream is = new ObjectInputStream(new FileInputStream(this.info.getName()));
                 this.students = (ArrayList<Student>) is.readObject();
                 is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        }else{
-            this.students = new ArrayList<>();
+        } else {
+            this.students = new ArrayList<Student>();
         }
     }
 
@@ -35,17 +39,17 @@ public class Classroom implements Serializable {
         this.students = students;
     }
 
-    public void printAllStudents(){
-        if(this.students.isEmpty()){
+    public void printAllStudents() {
+        if (this.students.isEmpty()) {
             System.out.println("There are no students!");
             return;
         }
-        for (Student s:this.students) {
-            System.out.println("First name: "+s.getFirstName());
-            System.out.println("Last name: "+s.getLastName());
-            System.out.println("ClassNumber: "+s.getClassNumber());
-            for(Grade g:s.grades){
-                System.out.println("Subject: "+g.getSubject()+" - Grade: "+g.getGrade());
+        for (Student s : this.students) {
+            System.out.println("First name: " + s.getFirstName());
+            System.out.println("Last name: " + s.getLastName());
+            System.out.println("ClassNumber: " + s.getClassNumber());
+            for (Grade g : s.grades) {
+                System.out.println("Subject: " + g.getSubject() + " - Grade: " + g.getGrade());
             }
             System.out.println();
         }
@@ -54,7 +58,7 @@ public class Classroom implements Serializable {
     public String checkValidGrade(String grade) {
         int scoreToInt = Integer.parseInt(grade);
         while (true) {
-            if(scoreToInt >= 2 && scoreToInt <= 6) {
+            if (scoreToInt >= 2 && scoreToInt <= 6) {
                 return String.valueOf(scoreToInt);
             }
             System.out.print("Please enter valid student grade (2 - 6): ");
@@ -62,48 +66,98 @@ public class Classroom implements Serializable {
         }
     }
 
-    public boolean checkValidClassNumber(String classNum) {
-        if(students.isEmpty()) {
+    public boolean checkValidSubject(String classNum, String subject) {
+        if (students.isEmpty()) {
             return false;
         }
-        for(Student student : students) {
-            if(classNum.equals(student.getClassNumber())) {
+        for (Student student : students) {
+            if (student.getClassNumber().equals(classNum)) {
+                for (Grade g : student.grades) {
+                    if (g.getSubject().equals(subject)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+
+    }
+
+    public boolean checkValidClassNumber(String classNum) {
+        if (students.isEmpty()) {
+            return false;
+        }
+        for (Student student : students) {
+            if (classNum.equals(student.getClassNumber())) {
                 return true;
             }
         }
         return false;
     }
 
-    public void addGrade(){
-        if(students.isEmpty()){
+    public void removeGrade(){
+        if(this.students.isEmpty()){
+            System.out.println("There are no students");
+            return;
+        }
+        System.out.println("Enter ClassNumber: ");
+        String classNum = scan.nextLine();
+        if(checkValidClassNumber(classNum)){
+            System.out.println("Enter Subject: ");
+            String subject = scan.nextLine();
+            if(checkValidSubject(classNum, subject)){
+                System.out.println("What grade do you want to remove: ");
+                String chosengrade = scan.nextLine();
+                for (Student student : students) {
+                    if(student.getClassNumber().equals(classNum)) {
+                        for(Grade g : student.grades){
+                            if(g.getSubject().equals(subject)){
+                                if(g.getGrade().length()==1 && g.getGrade().equals(chosengrade)){
+                                    student.grades.remove(g);
+                                }else {
+                                    g.setGrade(g.getGrade().replaceFirst("" + chosengrade, "a "));
+                                    g.setGrade(g.getGrade().replaceFirst(", a ", ""));
+                                    g.setGrade(g.getGrade().replaceFirst("a , ", ""));
+                                }
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void addGrade() {
+        if (students.isEmpty()) {
             System.out.println("There are no students!");
             return;
         }
         System.out.print("Enter ClassNumber:");
         String classNum = scan.nextLine();
-        if(checkValidClassNumber(classNum)) {
+        if (checkValidClassNumber(classNum)) {
             System.out.print("Enter Subject:");
             String subject = scan.nextLine();
             System.out.print("Enter Grade:");
             String grade = scan.nextLine();
             grade = checkValidGrade(grade);
             for (Student student : students) {
-                if(student.getClassNumber().equals(classNum)) {
-                    for(Grade g : student.grades){
-                        if(g.getSubject().equals(subject)){
-                            g.setGrade(g.getGrade() + ", "+grade);
+                if (student.getClassNumber().equals(classNum)) {
+                    for (Grade g : student.grades) {
+                        if (g.getSubject().equals(subject)) {
+                            g.setGrade(g.getGrade() + ", " + grade);
                             return;
                         }
                     }
                     student.grades.add(new Grade(subject, grade));
                 }
             }
-        }else{
+        } else {
             System.out.println("There is no student with that ClassNumber!");
         }
     }
 
-    public void addStudents(){
+    public void addStudents() {
         System.out.print("How many students do you want to add: ");
         int count = Integer.parseInt(scan.nextLine());
         for (int i = 0; i < count; i++) {
@@ -114,7 +168,7 @@ public class Classroom implements Serializable {
             String lastName = scan.nextLine();
             System.out.print("ClassNumber: ");
             String classNumber = scan.nextLine();
-            while(true) {
+            while (true) {
                 if (!checkValidClassNumber(classNumber)) {
                     break;
                 } else {
@@ -128,14 +182,27 @@ public class Classroom implements Serializable {
         }
     }
 
+    public void removeStudents(){
+        System.out.println("Enter the class number of the student you want to remove?");
+        String classNum = scan.nextLine();
+        if(checkValidClassNumber(classNum)){
+            for (Student student : students) {
+                if(student.getClassNumber().equals(classNum)){
+                    students.remove(student);
+                    return;
+                }
+            }
+        }
+    }
+
     public void endProgram() {
-        try{
+        try {
             ObjectOutputStream writeStream = new ObjectOutputStream(new FileOutputStream(this.info.getName()));
             writeStream.writeObject(this.students);
             writeStream.flush();
             writeStream.close();
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
