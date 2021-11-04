@@ -1,10 +1,11 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Grade implements Serializable {
     private String subject;
-    private String grade;
+    private ArrayList<Integer> grade;
 
-    public Grade(String subject, String grade) {
+    public Grade(String subject, ArrayList<Integer> grade) {
         this.subject = subject;
         this.grade = grade;
     }
@@ -17,11 +18,12 @@ public class Grade implements Serializable {
         this.subject = subject;
     }
 
-    public String getGrade() {
+    public ArrayList<Integer> getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(ArrayList<Integer> grade) {
         this.grade = grade;
     }
+
 }

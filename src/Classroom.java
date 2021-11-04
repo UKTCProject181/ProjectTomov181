@@ -66,14 +66,13 @@ public class Classroom implements Serializable {
         }
     }
 
-    public String checkValidGrade(String grade) {
-        int scoreToInt = Integer.parseInt(grade);
+    public int checkValidGrade(Integer grade) {
         while (true) {
-            if (scoreToInt >= 2 && scoreToInt <= 6) {
-                return String.valueOf(scoreToInt);
+            if (grade >= 2 && grade <= 6) {
+                return grade;
             }
             System.out.print("Please enter valid student grade (2 - 6): ");
-            scoreToInt = Integer.parseInt(scan.nextLine());
+            grade = Integer.parseInt(scan.nextLine());
         }
     }
 
@@ -118,17 +117,15 @@ public class Classroom implements Serializable {
             String subject = scan.nextLine();
             if(checkValidSubject(classNum, subject)){
                 System.out.println("What grade do you want to remove: ");
-                String chosengrade = scan.nextLine();
+                int chosengrade = checkValidGrade(Integer.parseInt(scan.nextLine()));
                 for (Student student : students) {
                     if(student.getClassNumber().equals(classNum)) {
                         for(Grade g : student.grades){
                             if(g.getSubject().equals(subject)){
-                                if(g.getGrade().length()==1 && g.getGrade().equals(chosengrade)){
+                                if(g.getGrade().size()==1 && g.getGrade().contains(chosengrade)){
                                     student.grades.remove(g);
                                 }else {
-                                    g.setGrade(g.getGrade().replaceFirst("" + chosengrade, "a "));
-                                    g.setGrade(g.getGrade().replaceFirst(", a ", ""));
-                                    g.setGrade(g.getGrade().replaceFirst("a , ", ""));
+                                    g.getGrade().remove(g.getGrade().indexOf(chosengrade));
                                 }
                                 return;
                             }
@@ -150,17 +147,18 @@ public class Classroom implements Serializable {
             System.out.print("Enter Subject:");
             String subject = scan.nextLine();
             System.out.print("Enter Grade:");
-            String grade = scan.nextLine();
-            grade = checkValidGrade(grade);
+            int grade = checkValidGrade(Integer.parseInt(scan.nextLine()));
             for (Student student : students) {
                 if (student.getClassNumber().equals(classNum)) {
                     for (Grade g : student.grades) {
                         if (g.getSubject().equals(subject)) {
-                            g.setGrade(g.getGrade() + ", " + grade);
+                            g.getGrade().add(grade);
                             return;
                         }
                     }
-                    student.grades.add(new Grade(subject, grade));
+                    ArrayList<Integer> gradelist = new ArrayList<Integer>();
+                    gradelist.add(grade);
+                    student.grades.add(new Grade(subject, gradelist));
                 }
             }
         } else {
