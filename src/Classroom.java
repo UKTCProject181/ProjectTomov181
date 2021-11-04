@@ -11,23 +11,34 @@ public class Classroom implements Serializable {
 
 
     //
-    public Classroom(String paralelka) throws IOException {
+    public Classroom(String paralelka) {
         this.paralelka = paralelka;
-        this.info = new File(paralelka + ".txt");
-        if (this.info.createNewFile()) {
-            this.students = new ArrayList<Student>();
-        } else if (this.info.length() != 0) {
-            try {
-                ObjectInputStream is = new ObjectInputStream(new FileInputStream(this.info.getName()));
-                this.students = (ArrayList<Student>) is.readObject();
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+        this.info = new File(paralelka + ".bin");
+        this.students = readStudentsFile();
+    }
+
+    public ArrayList<Student> readStudentsFile() {
+        try {
+            if (this.info.createNewFile()) {
+                return new ArrayList<Student>();
+            } else if (this.info.length() != 0) {
+                try {
+                    ObjectInputStream is = new ObjectInputStream(new FileInputStream(this.info.getName()));
+                    ArrayList<Student> students = (ArrayList<Student>) is.readObject();
+                    is.close();
+                    return students;
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                    System.out.println("The program will not work properly");
+                    return new ArrayList<Student>();
+                }
+            } else {
+                return new ArrayList<Student>();
             }
-        } else {
-            this.students = new ArrayList<Student>();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("The program will not work properly");
+            return new ArrayList<Student>();
         }
     }
 
